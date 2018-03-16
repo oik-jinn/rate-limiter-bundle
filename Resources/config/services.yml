@@ -1,0 +1,4 @@
+services:
+    tnc_rate_limiter:
+        class: TNC\RateLimitBundle\Services\Limiter
+        arguments: ["@tnc_rate_limiters_connection", "%tnc_rate_limiters%"]
