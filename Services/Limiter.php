@@ -1,6 +1,6 @@
 <?php
 
-namespace TNC\RateLimitBundle\Services;
+namespace RateLimitBundle\Services;
 
 use InvalidArgumentException;
 
@@ -9,7 +9,6 @@ class Limiter
     const OPERATOR_USER = 'user_id';
     const OPERATOR_IP = 'ip';
 
-    public    $waitingTime;
     protected $client;
     protected $limiters;
 
@@ -39,11 +38,11 @@ class Limiter
      */
     public function isExceeded($resourceType, $operatorIdentifier, $resourceIdentifier = null)
     {
-        // get operatorType  according to operator identifier
+        // Get operatorType  according to operator identifier
         $operatorType = filter_var($operatorIdentifier, FILTER_VALIDATE_IP) ? self::OPERATOR_IP : self:: OPERATOR_USER;
         $configuration = $this->getLimiterConfiguration($resourceType, $operatorType);
 
-        // check whether resourceIdentifier is legal
+        // Check whether resourceIdentifier is legal
         $isResourceUnique = $configuration[0]['is_resource_unique'] ?? false;
         if ($resourceIdentifier  && !$isResourceUnique) {
             throw new InvalidArgumentException("the resource of limiter is not unique,please check your configuration");

@@ -19,11 +19,11 @@ class Counter extends Strategy
             $limiter['decay'] = strtotime('tomorrow midnight') - $now;
         }
 
-        // watch the key to avoid other transaction change the value
+        // Watch the key to avoid other transaction change the value
         $this->client->watch($key);
         $current = $this->client->llen($key);
 
-        // transaction start
+        // Transaction start
         $tx = $this->client->transaction();
         if ($current >= $limiter['limit']) {
             return false;
@@ -38,7 +38,7 @@ class Counter extends Strategy
                     return $e->getMessage();
                 }
             } else {
-                // use transaction to let rpush and expire to be an atomic operation
+                // Using transaction to let rpush and expire to be an atomic operation
                 $tx->rpush($key, $now);
                 $tx->expire($key, $limiter['decay']);
 
